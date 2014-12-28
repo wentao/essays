@@ -2,10 +2,16 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{fontspec}
 \usepackage{hyperref}
+\usepackage{parskip}
 \usepackage{xunicode}
 \usepackage{xltxtra}
 
 \setmainfont[Ligatures={Common,TeX}, Numbers={OldStyle}]{Palatino}
+%\setmainfont[Ligatures={Common,TeX}, Numbers={OldStyle}]{Adobe Garamond Pro}
+%\setmainfont[Ligatures={Common,TeX}, Numbers={OldStyle}]{Baskerville}
+
+\setlength{\parskip}{12pt}
+\setlength{\parindent}{0pt}
 
 \begin{document}
 \title{``Software bloat'' isn't an endemic problem}
@@ -23,5 +29,55 @@ According to
   requirements than the previous version whilst making only dubious
   user-perceptible improvements.
 \end{quote}
+
+\section*{Illusion of ``user''}
+
+The first part of the statement is probably true: Newer versions of
+software are usually bigger in size, run slower under the same
+hardware/platform, use more memory/disk, and consume more CPU cycles
+and energy. However, the second part with \emph{only dubious
+  user-perceptible improvements} is questionable, because the notion
+``user'' is not clearly defined.
+
+Let's take a look at the classic comparison between CLI (command line
+interface) and GUI (graphical user interface). In the early days of
+the computer, operating systems didn't have fancy UI, and were only
+used by scientists and engineers, for whom CLI was powerful, flexible
+and elegant enough to perform most daily tasks. With the popularity of
+PC (personal computer), GUI replaced CLI as the ``standard'' way of
+human-computer interaction. In terms of functionality, it's hard to
+find something that GUI can do but CLI can't. If we define the
+``user'' as an engineer, it is probably true that GUI only provides
+``dubious'' improvements on top of CLI. However, when the ``user''
+becomes a non-technical person, CLI is almost useless. Here is an
+example: My two-year old daughter can watch YouTube videos and
+navigate camera photos with my iPad. How can you imagine such thing
+could happen if we were living in a CLI world?
+
+I'm using the transition from CLI to GUI just to demonstrate software
+\emph{user} is not a static thing. The definition of the user changes
+as software evolves. The scope of the user is usually expanding,
+because of business reasons (growth, growth, and more growth!).
+
+The first user of software is usually the author/programmer himself
+(let's assume a male engineer here). He builds it, tests it, and fixes
+all the bugs he found. When he think it is in good state, his
+``perfect'' work will be reviewed by his boss, the second
+user. Feedbacks are inevitable, changes and improvements shall be
+done. Then it goes into the market. More feedbacks are coming in, more
+changes and improvements have to be done. This cycle repeats. A side
+effect is: software ends up having so many features that nobody would
+use 100\% of them. Earlier users won't use features needed by later
+users; later users need new features because features provided in
+earlier version of software are useless to them.
+
+Now let's look back at the definition of ``software bloat'': Is it
+really a problem? Probably not at all. Even if you think it's a bad
+thing from software engineering perspective, I don't think this kind
+of problem can be solved.
+
+\section*{Theory of evolution}
+
+
 
 \end{document}
