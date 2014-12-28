@@ -6,9 +6,33 @@
 \usepackage{xunicode}
 \usepackage{xltxtra}
 
+\usepackage{tikz}
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+  decorations.pathreplacing,decorations.pathmorphing,shapes,%
+  matrix,shapes.symbols}
+\tikzset{
+  box/.style={
+    rectangle,
+    rounded corners,
+    draw=black, thick,
+    text width=10em,
+    minimum height=2.5em,
+    text centered,
+    on chain},
+  block/.style={
+    rectangle,
+    text width=10em,
+    minimum height=2em,
+    text centered,
+    on chain},
+  every join/.style={<->,
+    thick,
+    shorten >=1pt}
+}
+
 \setmainfont[Ligatures={Common,TeX}, Numbers={OldStyle}]{Palatino}
-%\setmainfont[Ligatures={Common,TeX}, Numbers={OldStyle}]{Adobe Garamond Pro}
-%\setmainfont[Ligatures={Common,TeX}, Numbers={OldStyle}]{Baskerville}
+% \setmainfont[Ligatures={Common,TeX}, Numbers={OldStyle}]{Adobe Garamond Pro}
+% \setmainfont[Ligatures={Common,TeX}, Numbers={OldStyle}]{Baskerville}
 
 \setlength{\parskip}{12pt}
 \setlength{\parindent}{0pt}
@@ -41,34 +65,38 @@ and energy. However, the second part with \emph{only dubious
 
 Let's take a look at the classic comparison between CLI (command line
 interface) and GUI (graphical user interface). In the early days of
-the computer, operating systems didn't have fancy UI, and were only
-used by scientists and engineers, for whom CLI was powerful, flexible
-and elegant enough to perform most daily tasks. With the popularity of
-PC (personal computer), GUI replaced CLI as the ``standard'' way of
+computer, operating systems didn't have fancy UI, and were only used
+by scientists and engineers, for whom CLI was powerful, flexible and
+elegant enough to perform most daily tasks. With the popularity of PC
+(personal computer), GUI replaced CLI as the ``standard'' way of
 human-computer interaction. In terms of functionality, it's hard to
-find something that GUI can do but CLI can't. If we define the
-``user'' as an engineer, it is probably true that GUI only provides
-``dubious'' improvements on top of CLI. However, when the ``user''
-becomes a non-technical person, CLI is almost useless. Here is an
-example: My two-year old daughter can watch YouTube videos and
-navigate camera photos with my iPad. How can you imagine such thing
-could happen if we were living in a CLI world?
+find anything that GUI can do but CLI can't. If we define the ``user''
+as an engineer, it is probably true that GUI only provides ``dubious''
+improvements on top of CLI. However, if we define the ``user'' as a
+non-technical person, CLI becomes much harder to use than
+GUI. Learning common commands takes time and mastering them is very
+difficult for people without any technical background. In comparison,
+GUI is more intuitive and easier to master. Here is an example: My
+two-year old daughter can watch YouTube videos and navigate camera
+photos with my iPad. How can you imagine such thing could happen if we
+were living in a CLI world?
 
 I'm using the transition from CLI to GUI just to demonstrate software
-\emph{user} is not a static thing. The definition of the user changes
-as software evolves. The scope of the user is usually expanding,
-because of business reasons (growth, growth, and more growth!).
+\emph{user} is not a static thing. Its definition changes as software
+evolves. Its scope is usually expanding, because of business reasons
+(growth, growth, and more growth!).
 
 The first user of software is usually the author/programmer himself
 (let's assume a male engineer here). He builds it, tests it, and fixes
-all the bugs he found. When he think it is in good state, his
-``perfect'' work will be reviewed by his boss, the second
-user. Feedbacks are inevitable, changes and improvements shall be
-done. Then it goes into the market. More feedbacks are coming in, more
-changes and improvements have to be done. This cycle repeats. A side
-effect is: software ends up having so many features that nobody would
+all the bugs he ever finds. When he thinks his software is in a good
+state, he probably will send his ``perfect'' work to the second user:
+his boss in most cases. Feedbacks are inevitable, changes and
+improvements shall be done. Then the software will be released to the
+market. More feedbacks are coming in, more changes and improvements
+have to be done. This cycle repeats, and we will have a side effect:
+the software ends up having so many features that nobody would ever
 use 100\% of them. Earlier users won't use features needed by later
-users; later users need new features because features provided in
+users; later users need new features because some features provided in
 earlier version of software are useless to them.
 
 Now let's look back at the definition of ``software bloat'': Is it
@@ -78,50 +106,68 @@ of problem can be solved.
 
 \section*{Theory of evolution}
 
-Software adapts to changes of the user. Sometimes, software uses
-software, which are called libraries, frameworks, or platforms. They
-adapts to changes of end-user facing software. The universe of
-software is similar to an organic ecosystem. Everything has to adapt
-to changes of the surrounding environment: both its users and what it
-is using.
+Software adapts to the changes of the user. The user is not always
+human. Sometimes, its user is software itself. Examples of software
+being used by other software include libraries, frameworks, and
+platforms. Software also adapts to the changes of what it is using,
+which are called dependencies. The universe of software is similar to
+an organic ecosystem. Everything has to adapt to changes of its
+surrounding environment: either its users or what it is using.
 
-The dependency chain in software universe is like food chain in
-organic ecosystem. It has a layer-like structure. At the bottom, we
-have compilers and operating systems, which are responsible for
-hardware and software communication. On top of that, we have many
-infrastructural components that are not used by end-user directly, but
-by other software, such as database. At the top, we have application
-software that is used by human.
+The dependency chain in the software universe is like the food chain
+in an organic ecosystem. It is a layered structure. At the bottom, we
+have \emph{system software}, such as compilers and operating systems,
+which are responsible for hardware-software communication. On top of
+that, we have \emph{infrastructure software}, such as database, which
+is used by other software. At the top, we have \emph{application
+  software} that is used by human users.
 
-The external changes come from two places:
+\begin{center}
+  \begin{tikzpicture}
+    [node distance=1.5em,
+    start chain=going below,]
+    \node[block, join] {Human};
+    \node[box, join] (app) {Application};
+    \node[box, join] {Infrastructure};
+    \node[box, join] (sys) {System};
+    \node[block, join] {Hardware};
+    \draw[decorate, decoration={brace}]
+    let \p1=(app.north), \p2=(sys.south) in
+    ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[midway, right=1em] {Software};
+  \end{tikzpicture}
+\end{center}
+
+The ecosystem's external changes come from two sources
 \begin{itemize}
 \item Hardware: faster CPU, faster disk, more memory etc.
-\item Human: requirement changes, user scope expands etc.
+\item Human: requirement changes, user scope expanding etc.
 \end{itemize}
-These changes will trigger reactive response from the internal
-software universe in both directions.
+These changes will trigger reactive responses from the internal
+software universe in both directions: bottom up and top down.
 
 As a software developer, you have two choices when facing those
-changes: Carefully plan to adapt those changes, make your software
-better in terms of survivability; Or stick with the old ``users'', and
-avoid to be a bloat-ware. It's very hard to tell which choice is
-better. It depends. Under the first choice, no matter how careful you
-are, adding more features in software brings in complexity and
-bugs. That could kill your business if it's not executed
-properly. Under the second choice, staying unchanged means losing
-opportunities. New software might come out replacing yours in the near
-future.
+changes: Carefully plan improvements to adapt them and make your
+software better in terms of survivability; Or stick with the old
+``users'' and avoid being a bloat-ware developer. It's very hard to
+tell which choice is better. It depends on the situation. Under the
+first choice, no matter how careful you are, adding more features in
+software brings in complexity and bugs. That could kill your business
+if it's not executed properly. Under the second choice, staying
+unchanged means losing opportunities. New software might come out
+replacing yours in the near future.
 
 Remember backward-compatibility is like a curse to software. When you
-see changes coming, you usually add more stuff into your software. In
-this sense, software has to ``bloat'' in order to survive into the
-future.
+see changes coming, you are forced to add more stuff into your
+software because you don't want to lose older users or
+functionality. In this sense, software has to ``bloat'' in order to
+survive into the future.
 
 \section*{End}
 
-``Software bloat'' is not a problem, but a inevitable destiny we have
-to face. As a developer, you want to make sure your software grows in
-order to adapt changes. Failing to do so with proper engineering
-practice could kill your software (or your business) in the future.
+I would like to conclude: ``Software bloat'' is not a problem, but a
+inevitable destiny we as developers have to face. We want to make sure
+our software grows in order to adapt changes. Failing to do so with
+proper engineering practice could kill your software (or your
+business) in the future.
 
 \end{document}
